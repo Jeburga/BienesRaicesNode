@@ -1,12 +1,21 @@
-import express from "express";
+const express = require("express");
+const router = require('./routes/index');
+require('dotenv').config({path: 'variables.env'});
+const path = require('path')
 
-const express = require('express');
 const app = express();
 
-app.get('/', (req, res) => {
-    res.send('Hello world')
-})
+// Template engine
+app.set('view engine', 'pug');
+app.set('views', './views');
 
-const port = 3000
+// Carpeta Pública
+app.use(express.static("dist"));
 
-app.listen(port);
+// Configuración del Router
+app.use('/', router());
+
+// Estableciendo conexion con puerto
+app.listen(process.env.PORT, () => {
+    console.log('Conexión establecida, puerto ', process.env.PORT);
+});
