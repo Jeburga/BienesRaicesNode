@@ -39,4 +39,45 @@ const emailRegistro = async (datos) => {
   });
 };
 
-module.exports = emailRegistro;
+const emailOlvidePassword = async (datos) => {
+  try {
+    var transport = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: Number(process.env.EMAIL_PORT),
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+  } catch (error) {
+    console.log("Error al enviar el correo: ", error);
+  }
+
+  const { email, nombre, token } = datos;
+  const baseUrl = `${process.env.BACKEND_URL}:${process.env.PORT}`;
+
+  // Enviar email
+  await transport.sendMail({
+    from: "BienesRaices.com",
+    to: email,
+    subject: "Recupera tu Cuenta en BienesRaices.com",
+    text: "Reestablece tu password en BienesRaices.com",
+    html: `
+            <p>Hola ${nombre}, has solicitado reestablecer tu password en BienesRaices.com</p>
+
+            <p>
+                <a 
+                  href="${baseUrl}/olvide-password/${token}" 
+                  target="_blank"
+                >Reestablecer Password</a>
+            </p>
+
+            <p>Si no creaste esta cuenta, puedes ignorar el mensaje</p>
+        `,
+  });
+};
+
+module.exports = {
+  emailRegistro,
+  emailOlvidePassword
+};

@@ -12,13 +12,21 @@ module.exports = () => {
     router.get('/auth/confirmar/:token', usuarioController.confirmar);
     router.get('/auth/login', usuarioController.formularioLogin);
     router.get('/auth/olvide-password', usuarioController.formularioOlvidePassword);
+    router.post('/auth/olvide-password', usuarioController.resetPassword);
+    router.get('/auth/olvide-password/:token', usuarioController.comprobarToken);
+    router.post('auth/olvide-password/:token', usuarioController.nuevoPassword);
+
     
-    // También puedes mantener las rutas sin prefijo para compatibilidad
+    // rutas sin prefijo para compatibilidad
     router.get('/registro', usuarioController.formularioRegistro);
     router.post('/registro', usuarioController.registrar);
     router.get('/confirmar/:token', usuarioController.confirmar);
     router.get('/login', usuarioController.formularioLogin);
     router.get('/olvide-password', usuarioController.formularioOlvidePassword);
+    router.post('/olvide-password', usuarioController.resetPassword);
+    router.get('/olvide-password/:token', usuarioController.comprobarToken);
+    router.post('olvide-password/:token', usuarioController.nuevoPassword);
+
     
     return router;
 }
