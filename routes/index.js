@@ -11,6 +11,7 @@ module.exports = () => {
     router.post('/auth/registro', usuarioController.registrar);
     router.get('/auth/confirmar/:token', usuarioController.confirmar);
     router.get('/auth/login', usuarioController.formularioLogin);
+    router.post('/auth/login', usuarioController.autenticar);
     router.get('/auth/olvide-password', usuarioController.formularioOlvidePassword);
     router.post('/auth/olvide-password', usuarioController.resetPassword);
     router.get('/auth/olvide-password/:token', usuarioController.comprobarToken);
@@ -22,6 +23,7 @@ module.exports = () => {
     router.post('/registro', usuarioController.registrar);
     router.get('/confirmar/:token', usuarioController.confirmar);
     router.get('/login', usuarioController.formularioLogin);
+    router.post('/login', usuarioController.autenticar);
     router.get('/olvide-password', usuarioController.formularioOlvidePassword);
     router.post('/olvide-password', usuarioController.resetPassword);
     router.get('/olvide-password/:token', usuarioController.comprobarToken);

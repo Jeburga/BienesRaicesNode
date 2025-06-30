@@ -6,17 +6,23 @@ block content
             span.font-normal Raíces
         h2.text-center.text-2x1.font-extrabold= page
 
+        if errores
+            div(class="max-w-md mx-auto my-10")
+                each error in errores
+                    p.bg-red-600.text-white.uppercase.text-xs.text-center.p-2.mb-1.font-bold= error.msg
+
+
         div(class="mt-8 mx-auto max-w-md")
             div(class="bg-white py-8 px-4 shadow")
-                form(class="space-y-5")
+                form(class="space-y-5" method='POST')
                     input(type="hidden", name="_csrf" value= csrfToken)
                     div
                         label(class="block text-sm uppercase text-gray-500 mb-2 font-bold" for="email") Tu E-mail
-                        input(type="email", name="nombre" class="w-full py-2 px-3 border border-gray-300 rounded-md placeholder-gray-400" placeholder="Tu email" id="email")
+                        input(type="email", name="email" class="w-full py-2 px-3 border border-gray-300 rounded-md placeholder-gray-400" placeholder="Tu email")
                     
                     div
                         label(class="block text-sm uppercase text-gray-500 mb-2 font-bold" for="password") Tu Password
-                        input(type="password", name="nombre" class="w-full py-2 px-3 border border-gray-300 rounded-md placeholder-gray-400" placeholder="Tu email" id="password")
+                        input(type="password", name="password" class="w-full py-2 px-3 border border-gray-300 rounded-md placeholder-gray-400" placeholder="*********")
                     
                     div(class="flex items-center justify-between")
                         a(href="./registro" class="text-xs text-gray-500") ¿No tienes cuenta? Crea una

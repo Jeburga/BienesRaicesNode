@@ -10,6 +10,7 @@ const app = express();
 
 // Habilitar lectura de datos del formulario
 app.use( express.urlencoded({ extended: true }) );
+app.use(express.json())   
 
 // Habilitar cookie-parser y csrf
 app.use( cookieParser() )

@@ -1,6 +1,8 @@
 const { check, validationResult } = require("express-validator");
+const jwt = require('jsonwebtoken');
 const bcrypt = require("bcrypt");
 const generarId = require("../helpers/tokens");
+const generarJWT = require('../helpers/tokens');
 const { emailRegistro, emailOlvidePassword } = require("../helpers/emails");
 
 const Usuario = require("../models/Usuario");
@@ -11,6 +13,57 @@ const formularioLogin = (req, res) => {
     csrfToken: req.csrfToken(),
   });
 };
+
+const autenticar = async (req, res) => {
+
+  await check('email').notEmpty().withMessage('El email es obligatorio').run(req);
+  await check('password').notEmpty().withMessage('Tienes que colocar un password').run(req);
+
+  let resultado = validationResult(req);
+
+  if(!resultado.isEmpty()) {
+    return res.render('./auth/login', {
+      page: 'Iniciar sesión',
+      csrfToken: req.csrfToken(),
+      errores: resultado.array()
+    })
+  }
+
+  // Comprobar si usuario existe
+  const { email, password } = req.body
+  const usuario = await Usuario.findOne({ where: { email }});
+
+  // Si usuario no existe
+  if(!usuario) {
+    return res.render('./auth/login', {
+      page: 'Iniciar Sesión',
+      csrfToken: req.csrfToken(),
+      errores: [{ msg: 'El usuario no existe'}]
+    })
+  }
+
+  // Si el usuario está confirmado
+  if(!usuario.confirmado) {
+    return res.render('./auth/login', {
+      page: 'Iniciar sesión',
+      csrfToken: req.csrfToken(),
+      errores: [{ msg: 'Tu cuenta no está confirmada' }]
+    })
+  }
+
+  // Revisar el password
+  if(!usuario.verificarPassword(password)){
+    return res.render('./auth/login', {
+      page: 'Iniciar Sesión',
+      csrfToken: req.csrfToken(),
+      errores: [{ msg: 'El password es incorrecto'}]
+    })  
+  }
+  
+  // Autenticar el usuario
+  const token = generarJWT(usuario.id)
+  console.log(token);
+}
 
 const formularioRegistro = (req, res) => {
   res.render("./auth/registro", {
@@ -236,6 +289,7 @@ const nuevoPassword = async (req, res) => {
 
 module.exports = {
   formularioLogin,
+  autenticar,
   formularioRegistro,
   registrar,
   confirmar,
