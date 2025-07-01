@@ -2,7 +2,7 @@ const { check, validationResult } = require("express-validator");
 const jwt = require('jsonwebtoken');
 const bcrypt = require("bcrypt");
 const generarId = require("../helpers/tokens");
-const generarJWT = require('../helpers/tokens');
+const { generarJWT } = require('../helpers/tokens');
 const { emailRegistro, emailOlvidePassword } = require("../helpers/emails");
 
 const Usuario = require("../models/Usuario");
@@ -61,8 +61,15 @@ const autenticar = async (req, res) => {
   }
   
   // Autenticar el usuario
-  const token = generarJWT(usuario.id)
+  const token = generarJWT({ id: usuario.id, nombre: usuario.nombre })
+
   console.log(token);
+
+  // Almacenar en los cookies
+  return res.cookie('_token', token, {
+    httpOnly: true, // evita ataques CSRF
+    secure: true
+  }).redirect('/mis-propiedades')
 }
 
 const formularioRegistro = (req, res) => {

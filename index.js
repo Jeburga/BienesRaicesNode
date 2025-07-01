@@ -2,6 +2,7 @@ const express = require("express");
 const csrf = require('csurf');
 const cookieParser = require('cookie-parser');
 const router = require('./routes/index');
+const propiedadesRoutes = require('./routes/propiedadesRoutes');
 const db = require('./config/db');
 
 require('dotenv').config({path: 'variables.env'});
@@ -40,6 +41,7 @@ app.use(express.static("dist"));
 
 // Configuración del Router
 app.use('/', router());
+app.use('/', propiedadesRoutes());
 
 // Estableciendo conexion con puerto
 const port = process.env.PORT || 3000;
